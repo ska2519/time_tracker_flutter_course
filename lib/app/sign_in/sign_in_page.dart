@@ -6,17 +6,13 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 class SignInPage extends StatelessWidget {
   SignInPage({
     @required this.auth,
-    @required this.onSignIn,
-  }); //생성자 / onSignIn는 필수 인수
+  }); //생성자
 
-  //custom callback as a final function with firebase user
-  final Function(User) onSignIn;
   final AuthBase auth;
 
   Future<void> _signInAnonymously() async {
     try {
-      User user = await auth.signInAnonymously();
-      onSignIn(user);
+      await auth.signInAnonymously();
     } catch (e) {
       print(e.toString());
     }
