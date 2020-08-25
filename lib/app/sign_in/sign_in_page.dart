@@ -21,12 +21,12 @@ class SignInPage extends StatelessWidget {
     return Provider<SignInBloc>(
       //context 사용하지 않기에 (_) 표기 = place holder for the context argument
       create: (_) => SignInBloc(auth: auth),
-      //widget이 위젯트리에서 지워질 때 bloc도 처분
-      dispose: (context, bloc) => bloc.dispose(),
       //Consumer 공급자 없이 생성 된 객체에 Provider 접근 방법
       child: Consumer<SignInBloc>(
         builder: (context, bloc, _) => SignInPage(bloc: bloc),
       ),
+      //widget이 위젯트리에서 지워질 때 bloc도 처분
+      dispose: (context, bloc) => bloc.dispose(),
     );
   }
 
