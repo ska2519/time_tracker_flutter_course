@@ -1,11 +1,15 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
+import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
-import 'package:time_tracker_flutter_course/services/auth_provider.dart';
+import 'package:flutter/services.dart';
 
 enum EmailSignInFormType { signIn, register }
 
@@ -28,43 +32,35 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   bool _submitted = false;
   bool _isLoading = false;
 
+  //창이 닫힐때 dispose(처분하다) 필요 없는 위젯 제거
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
   void _submit() async {
     setState(() {
       _submitted = true;
       _isLoading = true;
     });
     try {
-      final auth = AuthProvider.of(context);
+      final auth = Provider.of<AuthBase>(context, listen: false);
       if (_formType == EmailSignInFormType.signIn) {
         await auth.signInWithEmailAndPassword(_email, _password);
       } else {
         await auth.createWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
-    } catch (e) {
-/*
-      if (Platform.isIOS) {
-        print('show CupertinoAlertDialog');
-      }
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Sign in failed'),
-              content: Text(e.toString()),
-              actions: [
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            );
-          });
-*/
-      PlatformAlertDialog(
+
+      //PlatformException 만 catch
+    } on FirebaseAuthException catch (e) {
+      PlatformExceptionAlertDialog(
         title: 'Sign in failed',
-        content: e.toString(),
-        defaultActionText: 'OK',
+        exception: e,
       ).show(context);
     } finally {
       setState(() {

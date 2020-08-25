@@ -12,9 +12,9 @@ class User {
 abstract class AuthBase {
   Stream<User> get authStateChanges;
   Future<User> currentUser();
-  Future<User> signInAnonymously();
   Future<User> signInWithEmailAndPassword(String email, String password);
   Future<User> createWithEmailAndPassword(String email, String password);
+  Future<User> signInAnonymously();
   Future<User> signInWithGoogle();
   Future<User> signInWithFacebook();
   Future<void> signOut();
@@ -99,9 +99,10 @@ class Auth implements AuthBase {
       FacebookPermission.email,
     ]);
     if (result.accessToken != null) {
-      final authResult = await _auth.signInWithCredential(
+      final userCredential = await _auth.signInWithCredential(
           auth.FacebookAuthProvider.credential(result.accessToken.token));
-      return _userFromFirebase(authResult.user);
+
+      return _userFromFirebase(userCredential.user);
     } else {
       throw PlatformException(
         code: 'ERROR_ABORTED_BY_USER',

@@ -28,8 +28,8 @@ class PlatformAlertDialog extends PlatformWidget {
           )
         : await showDialog<bool>(
             context: context,
-            barrierDismissible: false,
             builder: (content) => this,
+            barrierDismissible: false,
           );
   }
 
