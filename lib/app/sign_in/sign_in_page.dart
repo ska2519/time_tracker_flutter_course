@@ -1,37 +1,48 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_page.dart';
-import 'package:time_tracker_flutter_course/app/sign_in/sign_in_bloc.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/sign_in_button.dart';
+import 'package:time_tracker_flutter_course/app/sign_in/sign_in_manager.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/social_sign_in_button.dart';
-import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:time_tracker_flutter_course/common_widgets/firebaseauth_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class SignInPage extends StatelessWidget {
+  const SignInPage({Key key, @required this.manager, @required this.isLoading})
+      : super(key: key);
   //bloc을 생성자로 직접 전달
-  final SignInBloc bloc;
-  const SignInPage({Key key, @required this.bloc}) : super(key: key);
-
+  final SignInManager manager;
+  final bool isLoading;
   //static 정적 메서드로 만든 이유 / SignInBloc은 SignInPage와 함께 사용 가능
   //widget에 bloc 사용 시 정적 생성 메소드를 호출하여 프로젝트에서 사용하는 규칙
+  //context와 child 사용하지 않기에 (_),(__) 표기 = place holder for the context argument
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
-    return Provider<SignInBloc>(
-      //context 사용하지 않기에 (_) 표기 = place holder for the context argument
-      create: (_) => SignInBloc(auth: auth),
-      //Consumer 공급자 없이 생성 된 객체에 Provider 접근 방법
-      child: Consumer<SignInBloc>(
-        builder: (context, bloc, _) => SignInPage(bloc: bloc),
+    return ChangeNotifierProvider<ValueNotifier<bool>>(
+      // init value 뒤에 적어줘야함?? 지금은 안하면 일단 에러
+      create: (_) => ValueNotifier<bool>(false),
+      child: Consumer<ValueNotifier<bool>>(
+        //isLoading 값이 변경될 때 마다 Provider를 실행해 SignInManager 에 isLoading 값 전달
+        builder: (_, isLoading, __) => Provider<SignInManager>(
+          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
+          //Consumer 는 Provider 기반 동일한 모델 유형에 접근
+          child: Consumer<SignInManager>(
+            //builder는 ChangeNotifier 변경 될 때 호출 /SignInPage 도 rebuild
+            builder: (_, manager, __) =>
+                // .value로 bool 값 추출
+                SignInPage(manager: manager, isLoading: isLoading.value),
+          ),
+/*      //widget이 위젯트리에서 지워질 때 bloc도 처분
+          dispose: (context, bloc) => bloc.dispose(),*/
+        ),
       ),
-      //widget이 위젯트리에서 지워질 때 bloc도 처분
-      dispose: (context, bloc) => bloc.dispose(),
     );
   }
 
+  //sign_in_page에서 오류 처리 하는 이유는 context가 필요
   void _showSignInError(BuildContext context, FirebaseAuthException exception) {
-    PlatformExceptionAlertDialog(
+    FirebaseAuthExceptionAlertDialog(
       title: 'Sign in failed',
       exception: exception,
     ).show(context);
@@ -39,8 +50,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      await bloc.signInAnonymously();
-      //서명 페이지에서 오류 처리 하는 이유는 context가 필요
+      await manager.signInAnonymously();
     } on FirebaseAuthException catch (e) {
       _showSignInError(context, e);
     }
@@ -48,7 +58,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      await bloc.signInWithGoogle();
+      await manager.signInWithGoogle();
     } on FirebaseAuthException catch (e) {
       if (e.code != 'ERROR_ABORTED_BY_USER') {
         _showSignInError(context, e);
@@ -58,7 +68,7 @@ class SignInPage extends StatelessWidget {
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      await bloc.signInWithFacebook();
+      await manager.signInWithFacebook();
     } on FirebaseAuthException catch (e) {
       if (e.code != 'ERROR_ABORTED_BY_USER') {
         _showSignInError(context, e);
@@ -77,6 +87,7 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final isLoading = Provider.of<ValueNotifier<bool>>(context);
     return Scaffold(
       //appBar는 로딩과 관련 없어서 body만 스트림 빌더 적용
       appBar: AppBar(
@@ -84,18 +95,12 @@ class SignInPage extends StatelessWidget {
         elevation: 2.0,
       ),
       // body에 bool 타입 StreamBuilder 추가
-      body: StreamBuilder<bool>(
-          stream: bloc.isLoadingStream,
-          //스트림 로드 후 초기 데이터 false 지정 / 초기 데이터를 제공해서 연결 상태를 확인할 필요 X
-          initialData: false,
-          builder: (context, snapshot) {
-            return _buildContent(context, snapshot.data);
-          }),
+      body: _buildContent(context),
       backgroundColor: Colors.grey[200],
     );
   }
 
-  Widget _buildContent(BuildContext context, bool isLoading) {
+  Widget _buildContent(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
@@ -104,7 +109,7 @@ class SignInPage extends StatelessWidget {
         children: [
           SizedBox(
             height: 50.0,
-            child: _buildHeader(isLoading),
+            child: _buildHeader(),
           ),
           SizedBox(height: 30.0),
           SocialSignInButton(
@@ -152,7 +157,7 @@ class SignInPage extends StatelessWidget {
   }
 
   //헤더 분리하여 로딩중일시 서클 인디케이터 아닐 시 Sign in 표시
-  Widget _buildHeader(bool isLoading) {
+  Widget _buildHeader() {
     if (isLoading) {
       return Center(
         child: CircularProgressIndicator(),

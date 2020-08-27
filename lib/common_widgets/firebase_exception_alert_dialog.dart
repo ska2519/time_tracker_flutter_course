@@ -1,18 +1,18 @@
-import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:meta/meta.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
 
-class PlatformExceptionAlertDialog extends PlatformAlertDialog {
-  PlatformExceptionAlertDialog({
+class FirebaseExceptionAlertDialog extends PlatformAlertDialog {
+  FirebaseExceptionAlertDialog({
     @required String title,
-    @required PlatformException exception,
+    @required FirebaseException exception,
   }) : super(
           title: title,
           content: _message(exception),
           defaultActionText: 'OK',
         );
 
-  static String _message(PlatformException exception) {
+  static String _message(FirebaseException exception) {
     print('익셉션 : $exception');
     return _errors[exception.code] ?? exception.message;
   }

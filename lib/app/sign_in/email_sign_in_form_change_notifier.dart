@@ -2,39 +2,39 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_bloc.dart';
-import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_model.dart';
+import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_change_model.dart';
 import 'package:time_tracker_flutter_course/common_widgets/firebaseauth_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
-// Mixin으로 추가한 클래스 Model 로 이동 후 삭제됨 / with EmailAndPasswordValidators
 //stateless Widget으로 변경 불가 / TextEditingController가 상태 추적하기에 부작용 발생 가능
-class EmailSignInFormBlocBased extends StatefulWidget {
-  EmailSignInFormBlocBased({@required this.bloc});
+class EmailSignInChangeNotifier extends StatefulWidget {
+  EmailSignInChangeNotifier({@required this.model});
+  final EmailSignInChangeModel model;
 
-  final EmailSignInBloc bloc;
   static Widget create(BuildContext context) {
     final AuthBase auth = Provider.of<AuthBase>(context);
-    return Provider<EmailSignInBloc>(
-      create: (context) => EmailSignInBloc(auth: auth),
-      child: Consumer<EmailSignInBloc>(
-        builder: (context, bloc, _) => EmailSignInFormBlocBased(bloc: bloc),
+    return ChangeNotifierProvider<EmailSignInChangeModel>(
+      create: (context) => EmailSignInChangeModel(auth: auth),
+      child: Consumer<EmailSignInChangeModel>(
+        builder: (context, model, _) => EmailSignInChangeNotifier(model: model),
       ),
-      dispose: (context, bloc) => bloc.dispose(),
     );
   }
 
   @override
-  _EmailSignInFormBlocBasedState createState() =>
-      _EmailSignInFormBlocBasedState();
+  _EmailSignInChangeNotifierState createState() =>
+      _EmailSignInChangeNotifierState();
 }
 
-class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
+class _EmailSignInChangeNotifierState extends State<EmailSignInChangeNotifier> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+
+  //widget.model을 다른 곳에서 입력하지 않아도 되는 작은 트릭
+  EmailSignInChangeModel get model => widget.model;
 
   //창이 닫힐때 dispose(처분하다) 필요 없는 위젯 제거
   @override
@@ -48,10 +48,9 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
 
   Future<void> _submit() async {
     try {
-      //  bloc 을 state 클래스에서 사용 시 Widget 붙여서 Widget 안에 선언했기 때문에
-      await widget.bloc.submit();
+      await model.submit();
       Navigator.of(context).pop();
-      //PlatformException 만 catch
+      //FirebaseAuthException 만 catch
     } on FirebaseAuthException catch (e) {
       FirebaseAuthExceptionAlertDialog(
         title: 'Sign in failed',
@@ -61,7 +60,7 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
   }
 
   //email 작성 후 다음 버튼 누르면 패스워드 칸으로 포커스 이동
-  void _emailEditingComplete(EmailSignInModel model) {
+  void _emailEditingComplete() {
     //email 유효성 검사 실패 시 이메일 칸에 포커스 고정
     final newFocus = model.emailValidators.isValid(model.email)
         ? _passwordFocusNode
@@ -71,17 +70,17 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
 
   // Sign in ↔ Register form 변경 토글
   void _toggleFormType() {
-    widget.bloc.toggleFormType();
+    model.toggleFormType();
     //텍스트를 지울 때마다 컨트롤러와 모델에 든 값도 삭제
     _emailController.clear();
     _passwordController.clear();
   }
 
-  List<Widget> _buildChildren(EmailSignInModel model) {
+  List<Widget> _buildChildren() {
     return [
-      _buildEmailTextField(model),
+      _buildEmailTextField(),
       SizedBox(height: 8.0),
-      _buildPasswordTextField(model),
+      _buildPasswordTextField(),
       SizedBox(height: 8.0),
       FormSubmitButton(
         text: model.primaryButtonText,
@@ -95,7 +94,7 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
     ];
   }
 
-  TextField _buildPasswordTextField(EmailSignInModel model) {
+  TextField _buildPasswordTextField() {
     return TextField(
       controller: _passwordController,
       focusNode: _passwordFocusNode,
@@ -106,12 +105,12 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
         enabled: model.isLoading == false,
       ),
       textInputAction: TextInputAction.done,
-      onChanged: widget.bloc.passwordUpdate,
+      onChanged: model.passwordUpdate,
       onEditingComplete: _submit,
     );
   }
 
-  TextField _buildEmailTextField(EmailSignInModel model) {
+  TextField _buildEmailTextField() {
 //    model로 showErrorText 이전함
 //    bool showErrorText =
 //        model.submitted && !model.emailValidators.isValid(model.email);
@@ -128,27 +127,20 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
       textInputAction: TextInputAction.next,
       //(email) => widget.bloc.emailUpdate(email) 와 하단 동일
       //삭제 이유 onChanged 콜백과 emailUpdate 시그니쳐가 동일? / 매개 변수는 암시적으로 전달됨
-      onChanged: widget.bloc.emailUpdate,
-      onEditingComplete: () => _emailEditingComplete(model),
+      onChanged: model.emailUpdate,
+      onEditingComplete: () => _emailEditingComplete(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<EmailSignInModel>(
-        stream: widget.bloc.modelStream,
-        initialData: EmailSignInModel(),
-        builder: (context, snapshot) {
-          final EmailSignInModel model = snapshot.data;
-
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: _buildChildren(model),
-            ),
-          );
-        });
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: _buildChildren(),
+      ),
+    );
   }
 }
