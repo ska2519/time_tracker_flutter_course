@@ -51,7 +51,7 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
       //  bloc 을 state 클래스에서 사용 시 Widget 붙여서 Widget 안에 선언했기 때문에
       await widget.bloc.submit();
       Navigator.of(context).pop();
-      //PlatformException 만 catch
+      //FirebaseAuthException 만 catch
     } on FirebaseAuthException catch (e) {
       FirebaseAuthExceptionAlertDialog(
         title: 'Sign in failed',

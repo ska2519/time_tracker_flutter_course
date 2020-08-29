@@ -13,7 +13,12 @@ class FirebaseExceptionAlertDialog extends PlatformAlertDialog {
         );
 
   static String _message(FirebaseException exception) {
-    print('익셉션 : $exception');
+    if (exception.message ==
+        'The caller does not have permission to execute the specified operation.') {
+      if (exception.code == 'permission-denied') {
+        return '작업을 실행할 권한이 없습니다.';
+      }
+    }
     return _errors[exception.code] ?? exception.message;
   }
 
