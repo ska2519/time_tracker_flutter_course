@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'file:///C:/Users/skale/AndroidStudioProjects/time_tracker_flutter_course/lib/app/home/job_entries/date_time_picker.dart';
-import 'package:time_tracker_flutter_course/app/home/job_entries/format.dart';
+import 'package:provider/provider.dart';
+import 'package:time_tracker_flutter_course/app/home/job_entries/date_time_picker.dart';
+import 'file:///C:/Users/skale/AndroidStudioProjects/time_tracker_flutter_course/lib/services/format.dart';
 import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
@@ -10,16 +10,27 @@ import 'package:time_tracker_flutter_course/services/database.dart';
 
 class EntryPage extends StatefulWidget {
   const EntryPage({@required this.database, @required this.job, this.entry});
+
   final Job job;
   final Entry entry;
   final Database database;
 
-  static Future<void> show(
-      {BuildContext context, Database database, Job job, Entry entry}) async {
+  static Future<void> show({
+    BuildContext context,
+    Database database,
+    Job job,
+    Entry entry,
+  }) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) =>
-            EntryPage(database: database, job: job, entry: entry),
+        builder: (context) => Provider<Format>(
+          create: (context) => Format(),
+          child: EntryPage(
+            database: database,
+            job: job,
+            entry: entry,
+          ),
+        ),
         fullscreenDialog: false,
       ),
     );
@@ -135,8 +146,9 @@ class _EntryPageState extends State<EntryPage> {
   }
 
   Widget _buildDuration() {
+    final Format format = Provider.of<Format>(context, listen: false);
     final currentEntry = _entryFromState();
-    final durationFormatted = Format.hours(currentEntry.durationInHours);
+    final durationFormatted = format.hours(currentEntry.durationInHours);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[

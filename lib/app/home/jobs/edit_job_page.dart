@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
@@ -82,9 +81,9 @@ class _EditJobPageState extends State<EditJobPage> {
             defaultActionText: 'OK',
           ).show(context);
         } else {
-          // ?로 job이 있으면 .id 액세스 하는거고 왜이렇게 어렵게 생각했지 나눠서 하나씩 분석하자
+          // ?로 job이 있으면 .id 액세스 한다
           //create Job 할때는 widget.job이 null이면 documentIdFromCurrentDate 사용해서 ID생성
-          //?. == 액세스하기 전에 단순히 null 검사를 수행 연산자의 왼쪽이 null이 아니면 기존 id 사용 그게 아닐시(??) documentIdFromCurrentDate
+
           final id = widget.job?.id ?? documentIdFromCurrentDate();
           final job = Job(
             id: id,

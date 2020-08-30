@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:time_tracker_flutter_course/app/home/job_entries/format.dart';
+import 'package:provider/provider.dart';
+import 'file:///C:/Users/skale/AndroidStudioProjects/time_tracker_flutter_course/lib/services/format.dart';
 import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job.dart';
 
@@ -8,11 +9,13 @@ class EntryListItem extends StatelessWidget {
     @required this.entry,
     @required this.job,
     @required this.onTap,
+    @required this.format,
   });
 
   final Entry entry;
   final Job job;
   final VoidCallback onTap;
+  final Format format;
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +37,17 @@ class EntryListItem extends StatelessWidget {
   }
 
   Widget _buildContents(BuildContext context) {
-    final dayOfWeek = Format.dayOfWeek(entry.start);
-    final startDate = Format.date(entry.start);
+    //TODO: Homework #1
+    //TODO: using global access rather than scoped access
+    final Format format = Provider.of<Format>(context);
+    final dayOfWeek = format.dayOfWeek(entry.start);
+    final startDate = format.date(entry.start);
     final startTime = TimeOfDay.fromDateTime(entry.start).format(context);
     final endTime = TimeOfDay.fromDateTime(entry.end).format(context);
-    final durationFormatted = Format.hours(entry.durationInHours);
+    final durationFormatted = format.hours(entry.durationInHours);
 
     final pay = job.ratePerHour * entry.durationInHours;
-    final payFormatted = Format.currency(pay);
+    final payFormatted = format.currency(pay);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,6 +88,7 @@ class DismissibleEntryListItem extends StatelessWidget {
     this.job,
     this.onDismissed,
     this.onTap,
+    this.format,
   });
 
   final Key key;
@@ -89,6 +96,7 @@ class DismissibleEntryListItem extends StatelessWidget {
   final Job job;
   final VoidCallback onDismissed;
   final VoidCallback onTap;
+  final Format format;
 
   @override
   Widget build(BuildContext context) {
@@ -97,10 +105,14 @@ class DismissibleEntryListItem extends StatelessWidget {
       key: key,
       direction: DismissDirection.endToStart,
       onDismissed: (direction) => onDismissed(),
-      child: EntryListItem(
-        entry: entry,
-        job: job,
-        onTap: onTap,
+      child: Provider<Format>(
+        create: (context) => Format(),
+        child: EntryListItem(
+          entry: entry,
+          job: job,
+          onTap: onTap,
+          format: format,
+        ),
       ),
     );
   }

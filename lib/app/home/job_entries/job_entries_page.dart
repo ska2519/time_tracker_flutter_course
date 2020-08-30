@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
-import 'file:///C:/Users/skale/AndroidStudioProjects/time_tracker_flutter_course/lib/app/home/job_entries/entry_list_item.dart';
-import 'file:///C:/Users/skale/AndroidStudioProjects/time_tracker_flutter_course/lib/app/home/job_entries/entry_page.dart';
+import 'package:time_tracker_flutter_course/app/home/job_entries/entry_list_item.dart';
+import 'package:time_tracker_flutter_course/app/home/job_entries/entry_page.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/edit_job_page.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/list_items_builder.dart';
 import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
@@ -20,13 +20,11 @@ class JobEntriesPage extends StatelessWidget {
   final Job job;
 
   static Future<void> show(BuildContext context, Job job) async {
-    //job_page에서 받아본 BuildContext & Job
     final Database database = Provider.of<Database>(context, listen: false);
     await Navigator.of(context).push(
       MaterialPageRoute(
-        fullscreenDialog: false,
-        builder: (context) => JobEntriesPage(database: database, job: job),
-      ),
+          fullscreenDialog: false,
+          builder: (context) => JobEntriesPage(database: database, job: job)),
     );
   }
 
@@ -53,8 +51,11 @@ class JobEntriesPage extends StatelessWidget {
               'Edit',
               style: TextStyle(fontSize: 18.0, color: Colors.white),
             ),
-            onPressed: () =>
-                EditJobPage.show(context, job: job, database: database),
+            onPressed: () => EditJobPage.show(
+              context,
+              database: database,
+              job: job,
+            ),
           ),
         ],
       ),
@@ -80,7 +81,11 @@ class JobEntriesPage extends StatelessWidget {
               job: job,
               onDismissed: () => _deleteEntry(context, entry),
               onTap: () => EntryPage.show(
-                  context: context, database: database, job: job, entry: entry),
+                context: context,
+                database: database,
+                job: job,
+                entry: entry,
+              ),
             );
           },
         );

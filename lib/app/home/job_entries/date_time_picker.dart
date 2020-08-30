@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:time_tracker_flutter_course/app/home/job_entries/format.dart';
+import 'package:provider/provider.dart';
+import 'file:///C:/Users/skale/AndroidStudioProjects/time_tracker_flutter_course/lib/services/format.dart';
 import 'file:///C:/Users/skale/AndroidStudioProjects/time_tracker_flutter_course/lib/app/home/job_entries/input_dropdown.dart';
 
 class DateTimePicker extends StatelessWidget {
@@ -42,6 +43,7 @@ class DateTimePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Format format = Provider.of<Format>(context, listen: false);
     final valueStyle = Theme.of(context).textTheme.bodyText1;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -50,7 +52,7 @@ class DateTimePicker extends StatelessWidget {
           flex: 5,
           child: InputDropdown(
             labelText: labelText,
-            valueText: Format.date(selectedDate),
+            valueText: format.date(selectedDate),
             valueStyle: valueStyle,
             onPressed: () => _selectDate(context),
           ),
