@@ -20,7 +20,7 @@ class SignInPage extends StatelessWidget {
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
     return ChangeNotifierProvider<ValueNotifier<bool>>(
-      // create시 init value 뒤에 적어줘야함?? 지금은 안하면 일단 에러
+      // create 시 init value 뒤에 적어줘야함?? 지금은 안하면 일단 에러
       create: (_) => ValueNotifier<bool>(false),
       child: Consumer<ValueNotifier<bool>>(
         //isLoading 값이 변경될 때 마다 Provider를 실행해 SignInManager 에 isLoading 값 전달

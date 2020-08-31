@@ -13,6 +13,7 @@ import 'package:time_tracker_flutter_course/services/firestore_service.dart';
 abstract class Database {
   Future<void> setJob(Job job);
   Future<void> deleteJob(Job job);
+  Stream<Job> jobStream({@required String jobId});
   Stream<List<Job>> jobsStream();
 
   Future<void> setEntry(Entry entry);
@@ -40,11 +41,15 @@ class FirestoreDatabase implements Database {
   Future<void> deleteJob(Job job) async => await _service.deleteData(
         path: APIPath.job(uid, job.id),
       );
+  @override
+  Stream<Job> jobStream({@required String jobId}) => _service.documentStream(
+        path: APIPath.job(uid, jobId),
+        builder: (data, documentId) => Job.fromMap(data, documentId),
+      );
 
   @override
   Stream<List<Job>> jobsStream() => _service.collectionStream(
-      path: APIPath.jobs(uid),
-      builder: (data, documentId) => Job.fromMap(data, documentId));
+      path: APIPath.jobs(uid), builder: (data, documentId) => Job.fromMap(data, documentId));
 
   @override
   Future<void> setEntry(Entry entry) async => await _service.setData(
@@ -59,8 +64,7 @@ class FirestoreDatabase implements Database {
   @override
   //gets all entries for user, optionally filtering by job
   //job 인수로 필터링해서 job이 있는 항목만 스트림
-  Stream<List<Entry>> entriesStream({Job job}) =>
-      _service.collectionStream<Entry>(
+  Stream<List<Entry>> entriesStream({Job job}) => _service.collectionStream<Entry>(
         path: APIPath.entries(uid),
         queryBuilder: job != null
             //jobId 값이 있는 entry 값을 entries list로 만듬 - queryBuilder로 필터링

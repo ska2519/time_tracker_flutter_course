@@ -6,8 +6,7 @@ import 'package:time_tracker_flutter_course/common_widgets/platform_exception_al
 import 'package:time_tracker_flutter_course/services/database.dart';
 
 class EditJobPage extends StatefulWidget {
-  const EditJobPage({Key key, @required this.database, this.job})
-      : super(key: key);
+  const EditJobPage({Key key, @required this.database, this.job}) : super(key: key);
   final Database database;
   final Job job;
 
@@ -20,7 +19,7 @@ class EditJobPage extends StatefulWidget {
     //!!!!!show를 통해 AddJobPage 에서 Context 가져오기에 여기서 Provider 생성
     //!! AddJobPage를 통해 Database 가져와야 위젯 트리에서 Material App 아래가 아닌 AddJobPage에 붙음
 
-    await Navigator.of(context).push(
+    await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => EditJobPage(
           database: database,

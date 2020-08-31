@@ -8,9 +8,11 @@ abstract class FormatBase {
 }
 
 class Format implements FormatBase {
-  //TODO: static method → instance methods
-  // static method는 안변하기 때문에 앱 시작 후 시간이 안변함 instance로 변환 필요
-  //TODO: Add top level Provider<Format> and use it
+  //TODO: Homework #1 ✔
+  //TODO: scope access ➡ universe access ✔
+  //TODO: static method ➡ instance methods ✔
+  // static method는 안변하기 때문에 앱 시작 후 시간이 안변함 instance는 복수 생성 가능
+  //TODO: Add top level Provider<Format> and use it ✔
   // Format이 사용되는 EntryListItem, EntryPage에 Provider<Format> 부착
 
   @override

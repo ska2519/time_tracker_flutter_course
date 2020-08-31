@@ -21,7 +21,7 @@ class EntryPage extends StatefulWidget {
     Job job,
     Entry entry,
   }) async {
-    await Navigator.of(context).push(
+    await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => Provider<Format>(
           create: (context) => Format(),
@@ -62,11 +62,12 @@ class _EntryPageState extends State<EntryPage> {
   }
 
   Entry _entryFromState() {
-    final start = DateTime(_startDate.year, _startDate.month, _startDate.day,
-        _startTime.hour, _startTime.minute);
-    final end = DateTime(_endDate.year, _endDate.month, _endDate.day,
-        _endTime.hour, _endTime.minute);
+    final start = DateTime(
+        _startDate.year, _startDate.month, _startDate.day, _startTime.hour, _startTime.minute);
+    final end =
+        DateTime(_endDate.year, _endDate.month, _endDate.day, _endTime.hour, _endTime.minute);
     final id = widget.entry?.id ?? documentIdFromCurrentDate();
+    //TODO: Homework #2 sample?
     return Entry(
       id: id,
       jobId: widget.job.id,
@@ -130,8 +131,8 @@ class _EntryPageState extends State<EntryPage> {
       labelText: 'Start',
       selectedDate: _startDate,
       selectedTime: _startTime,
-      selectDate: (date) => setState(() => _startDate = date),
-      selectTime: (time) => setState(() => _startTime = time),
+      onSelectDate: (date) => setState(() => _startDate = date),
+      onSelectTime: (time) => setState(() => _startTime = time),
     );
   }
 
@@ -140,8 +141,8 @@ class _EntryPageState extends State<EntryPage> {
       labelText: 'End',
       selectedDate: _endDate,
       selectedTime: _endTime,
-      selectDate: (date) => setState(() => _endDate = date),
-      selectTime: (time) => setState(() => _endTime = time),
+      onSelectDate: (date) => setState(() => _endDate = date),
+      onSelectTime: (time) => setState(() => _endTime = time),
     );
   }
 
