@@ -1,21 +1,14 @@
 import 'package:meta/meta.dart';
+import 'package:time_tracker_flutter_course/services/format.dart';
 
 class EntryListItemModel {
   EntryListItemModel({
     @required this.entry,
     @required this.job,
-    this.dayOfWeek,
-    this.startDate,
-    this.startTime,
-    this.endTime,
-    this.durationFormatted,
+    @required this.format,
   });
 
   String entry;
   String job;
-  String dayOfWeek;
-  String startDate;
-  String startTime;
-  String endTime;
-  String durationFormatted;
+  Format format;
 }

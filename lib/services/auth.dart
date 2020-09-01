@@ -46,15 +46,14 @@ class Auth implements AuthBase {
 
   @override
   Future<User> signInWithEmailAndPassword(String email, String password) async {
-    final userCredential = await _auth.signInWithEmailAndPassword(
-        email: email, password: password);
+    final userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
     return _userFromFirebase(userCredential.user);
   }
 
   @override
   Future<User> createWithEmailAndPassword(String email, String password) async {
-    final userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email, password: password);
+    final userCredential =
+        await _auth.createUserWithEmailAndPassword(email: email, password: password);
     return _userFromFirebase(userCredential.user);
   }
 
@@ -63,12 +62,10 @@ class Auth implements AuthBase {
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
     if (googleUser != null) {
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       // Create a new credential
       if (googleAuth.idToken != null && googleAuth.accessToken != null) {
-        final authResult =
-            await _auth.signInWithCredential(auth.GoogleAuthProvider.credential(
+        final authResult = await _auth.signInWithCredential(auth.GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         ));
@@ -99,8 +96,8 @@ class Auth implements AuthBase {
       FacebookPermission.email,
     ]);
     if (result.accessToken != null) {
-      final userCredential = await _auth.signInWithCredential(
-          auth.FacebookAuthProvider.credential(result.accessToken.token));
+      final userCredential = await _auth
+          .signInWithCredential(auth.FacebookAuthProvider.credential(result.accessToken.token));
 
       return _userFromFirebase(userCredential.user);
     } else {
