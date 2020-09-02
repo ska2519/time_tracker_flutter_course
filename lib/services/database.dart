@@ -71,6 +71,7 @@ class FirestoreDatabase implements Database {
             ? (query) => query.where('jobId', isEqualTo: job.id)
             : null,
         //jobId로 필터링 된 entries data에서 entryId(documentId)를 스트림하는 빌더
+
         builder: (data, documentId) => Entry.fromMap(data, documentId),
         //  list.dart안에 있는 sort 메서드로 지정한 순서(lhs, rhs)에 따라 목록을 정렬
         // Stream<List<Entry>> 안의 1hs는 시작 rhs는 끝 - 시작일자로 비교해서 정렬(sorting)

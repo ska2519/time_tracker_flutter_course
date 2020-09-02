@@ -8,9 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/home/job_entries/entry_list_item.dart';
 import 'package:time_tracker_flutter_course/app/home/job_entries/entry_page.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/edit_job_page.dart';
+import 'package:time_tracker_flutter_course/app/home/jobs/empty_content.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/list_items_builder.dart';
 import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job.dart';
+import 'package:time_tracker_flutter_course/app/home/tab_item.dart';
 import 'package:time_tracker_flutter_course/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 

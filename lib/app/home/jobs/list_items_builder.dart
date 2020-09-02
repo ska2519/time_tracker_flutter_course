@@ -10,8 +10,7 @@ import 'package:time_tracker_flutter_course/app/home/jobs/empty_content.dart';
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
 
 class ListItemsBuilder<T> extends StatelessWidget {
-  const ListItemsBuilder(
-      {Key key, @required this.snapshot, @required this.itemBuilder})
+  const ListItemsBuilder({Key key, @required this.snapshot, @required this.itemBuilder})
       : super(key: key);
   final AsyncSnapshot<List<T>> snapshot;
   final ItemWidgetBuilder<T> itemBuilder;

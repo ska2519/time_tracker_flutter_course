@@ -5,8 +5,10 @@ import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class User {
-  User({@required this.uid});
+  User({@required this.uid, @required this.photoUrl, @required this.displayName});
   final String uid;
+  final String photoUrl;
+  final String displayName;
 }
 
 abstract class AuthBase {
@@ -24,7 +26,13 @@ class Auth implements AuthBase {
   final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
 
   User _userFromFirebase(auth.User user) {
-    return _auth.currentUser != null ? User(uid: user.uid) : null;
+    return _auth.currentUser != null
+        ? User(
+            uid: user.uid,
+            displayName: user.displayName,
+            photoUrl: user.photoURL,
+          )
+        : null;
   }
 
   @override

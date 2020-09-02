@@ -22,9 +22,13 @@ class LandingPage extends StatelessWidget {
               return SignInPage.create(context);
             }
             //JobsPage에 FirestoreDatabase 추적하는 Provider 장착
-            return Provider<Database>(
-              create: (_) => FirestoreDatabase(uid: user.uid),
-              child: HomePage(),
+            //value로 추가 provider 장착
+            return Provider<User>.value(
+              value: user,
+              child: Provider<Database>(
+                create: (_) => FirestoreDatabase(uid: user.uid),
+                child: HomePage(),
+              ),
             );
           } else {
             return Scaffold(
