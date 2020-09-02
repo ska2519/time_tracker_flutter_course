@@ -1,13 +1,13 @@
 import 'package:intl/intl.dart';
 
-abstract class FormatBase {
+/*abstract class FormatBase {
   String hours(double hours);
   String date(DateTime date);
   String dayOfWeek(DateTime date);
   String currency(double pay);
-}
+}*/
 
-class Format implements FormatBase {
+class Format /*implements FormatBase*/ {
   //TODO: Homework #1 ✔
   //TODO: scope access ➡ universe access ✔
   //TODO: static method ➡ instance methods ✔
@@ -15,7 +15,7 @@ class Format implements FormatBase {
   //TODO: Add top level Provider<Format> and use it ✔
   // Format이 사용되는 EntryListItem, EntryPage에 Provider<Format> 부착
 
-  @override
+  // @override
   String hours(double hours) {
     final hoursNotNegative = hours < 0.0 ? 0.0 : hours;
     final formatter = NumberFormat.decimalPattern();
@@ -23,17 +23,17 @@ class Format implements FormatBase {
     return '${formatted}h';
   }
 
-  @override
+  // @override
   String date(DateTime date) {
     return DateFormat.yMMMd().format(date);
   }
 
-  @override
+  // @override
   String dayOfWeek(DateTime date) {
     return DateFormat.E().format(date);
   }
 
-  @override
+  // @override
   String currency(double pay) {
     if (pay != 0.0) {
       final formatter = NumberFormat.simpleCurrency(decimalDigits: 0);

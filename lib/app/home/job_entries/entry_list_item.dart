@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'file:///C:/Users/skale/AndroidStudioProjects/time_tracker_flutter_course/lib/services/format.dart';
+import 'package:time_tracker_flutter_course/app/home/job_entries/format.dart';
 import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
-import 'package:time_tracker_flutter_course/app/home/models/entry_list_item_model.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job.dart';
 
 class EntryListItem extends StatelessWidget {
@@ -11,9 +10,8 @@ class EntryListItem extends StatelessWidget {
     @required this.job,
     @required this.onTap,
     @required this.format,
-    @required this.model,
   });
-  final EntryListItemModel model;
+
   final Entry entry;
   final Job job;
   final VoidCallback onTap;
@@ -44,8 +42,8 @@ class EntryListItem extends StatelessWidget {
     //TODO: 2.entry, job as constructor arguments
     //TODO: 3.All formatted values as output variables
     //TODO: 4.Pass this as constructor argument to EntryListItem
-
-    final Format format = Provider.of<Format>(context);
+    Format format = Format();
+    //final Format format = Provider.of<Format>(context);
     final dayOfWeek = format.dayOfWeek(entry.start);
     final startDate = format.date(entry.start);
     final startTime = TimeOfDay.fromDateTime(entry.start).format(context);
