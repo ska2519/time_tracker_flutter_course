@@ -41,9 +41,7 @@ class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
 
   //Sign in page 로그인&레지스트 버튼의 Text 변경
   String get primaryButtonText {
-    return formType == EmailSignInFormType.signIn
-        ? 'Sign in'
-        : 'Create an account';
+    return formType == EmailSignInFormType.signIn ? 'Sign in' : 'Create an account';
   }
 
   String get secondaryButtonText {
@@ -54,9 +52,7 @@ class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
 
   // submit 버튼 활성화
   bool get canSubmit {
-    return emailValidators.isValid(email) &&
-        passwordValidators.isValid(password) &&
-        !isLoading;
+    return emailValidators.isValid(email) && passwordValidators.isValid(password) && !isLoading;
   }
 
   String get passwordErrorText {
@@ -83,9 +79,9 @@ class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
     );
   }
 
-  void emailUpdate(String email) => updateWith(email: email);
+  void updateEmail(String email) => updateWith(email: email);
 
-  void passwordUpdate(String password) => updateWith(password: password);
+  void updatePassword(String password) => updateWith(password: password);
 
   void updateWith({
     String email,

@@ -5,7 +5,11 @@ import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class User {
-  User({@required this.uid, @required this.photoUrl, @required this.displayName});
+  User({
+    @required this.uid,
+    this.photoUrl,
+    this.displayName,
+  });
   final String uid;
   final String photoUrl;
   final String displayName;

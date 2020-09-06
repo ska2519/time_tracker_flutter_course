@@ -23,8 +23,7 @@ class EmailSignInChangeNotifier extends StatefulWidget {
   }
 
   @override
-  _EmailSignInChangeNotifierState createState() =>
-      _EmailSignInChangeNotifierState();
+  _EmailSignInChangeNotifierState createState() => _EmailSignInChangeNotifierState();
 }
 
 class _EmailSignInChangeNotifierState extends State<EmailSignInChangeNotifier> {
@@ -62,9 +61,8 @@ class _EmailSignInChangeNotifierState extends State<EmailSignInChangeNotifier> {
   //email 작성 후 다음 버튼 누르면 패스워드 칸으로 포커스 이동
   void _emailEditingComplete() {
     //email 유효성 검사 실패 시 이메일 칸에 포커스 고정
-    final newFocus = model.emailValidators.isValid(model.email)
-        ? _passwordFocusNode
-        : _emailFocusNode;
+    final newFocus =
+        model.emailValidators.isValid(model.email) ? _passwordFocusNode : _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 
@@ -105,7 +103,7 @@ class _EmailSignInChangeNotifierState extends State<EmailSignInChangeNotifier> {
         enabled: model.isLoading == false,
       ),
       textInputAction: TextInputAction.done,
-      onChanged: model.passwordUpdate,
+      onChanged: model.updatePassword,
       onEditingComplete: _submit,
     );
   }
@@ -127,7 +125,7 @@ class _EmailSignInChangeNotifierState extends State<EmailSignInChangeNotifier> {
       textInputAction: TextInputAction.next,
       //(email) => widget.bloc.emailUpdate(email) 와 하단 동일
       //삭제 이유 onChanged 콜백과 emailUpdate 시그니쳐가 동일? / 매개 변수는 암시적으로 전달됨
-      onChanged: model.emailUpdate,
+      onChanged: model.updateEmail,
       onEditingComplete: () => _emailEditingComplete(),
     );
   }

@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_model.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
+//adding values to a model string that can be used as an input to a stream builder
 class EmailSignInBloc {
   EmailSignInBloc({@required this.auth});
   final AuthBase auth;

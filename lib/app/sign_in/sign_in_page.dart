@@ -9,11 +9,18 @@ import 'package:time_tracker_flutter_course/common_widgets/firebaseauth_exceptio
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key, @required this.manager, @required this.isLoading})
-      : super(key: key);
+  const SignInPage({
+    Key key,
+    @required this.manager,
+    @required this.isLoading,
+  }) : super(key: key);
   //bloc을 생성자로 직접 전달
   final SignInManager manager;
   final bool isLoading;
+
+  //test 위해 key 만듬
+  static const Key emailPasswordKey = Key('email-password');
+
   //static 정적 메서드로 만든 이유 / SignInBloc은 SignInPage와 함께 사용 가능
   //widget에 bloc 사용 시 정적 생성 메소드를 호출하여 프로젝트에서 사용하는 규칙
   //context와 child 사용하지 않기에 (_),(__) 표기 = place holder for the context argument
@@ -130,6 +137,7 @@ class SignInPage extends StatelessWidget {
           ),
           SizedBox(height: 8.0),
           SignInButton(
+            key: emailPasswordKey,
             text: 'Sign in with Email',
             textColor: Colors.white,
             color: Colors.teal[700],

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 
 class Entry {
@@ -15,13 +17,13 @@ class Entry {
   DateTime end;
   String comment;
 
-  double get durationInHours =>
-      end.difference(start).inMinutes.toDouble() / 60.0;
+  double get durationInHours => end.difference(start).inMinutes.toDouble() / 60.0;
 
   //reading과 writing이 같은 type으로 일치(consistent)
   factory Entry.fromMap(Map<dynamic, dynamic> value, String id) {
     final int startMilliseconds = value['start'];
     final int endMilliseconds = value['end'];
+
     return Entry(
       id: id,
       jobId: value['jobId'],
@@ -38,5 +40,17 @@ class Entry {
       'end': end.millisecondsSinceEpoch,
       'comment': comment,
     };
+  }
+
+  @override
+  int get hashCode => hashValues(id, jobId, comment);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    //다른 개체가 현재 개체와 동일한 유형인지 확인
+    if (runtimeType != other.runtimeType) return false;
+    final Entry otherEntry = other;
+    return id == otherEntry.id && jobId == otherEntry.jobId && comment == otherEntry.comment;
   }
 }
