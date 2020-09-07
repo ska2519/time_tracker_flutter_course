@@ -13,11 +13,11 @@ class EntryPage extends StatefulWidget {
 
   final Job job;
   final Entry entry;
-  final Database database;
+  final DataBase database;
 
   static Future<void> show({
     BuildContext context,
-    Database database,
+    DataBase database,
     Job job,
     Entry entry,
   }) async {

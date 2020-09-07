@@ -7,13 +7,13 @@ import 'package:time_tracker_flutter_course/services/database.dart';
 
 class EditJobPage extends StatefulWidget {
   const EditJobPage({Key key, @required this.database, this.job}) : super(key: key);
-  final Database database;
+  final DataBase database;
   final Job job;
 
   //탐색 스택 내부에 새 경로를 푸시 // {Job job}  명명 된 매개 변수
   static Future<void> show(
     BuildContext context, {
-    Database database,
+    DataBase database,
     Job job,
   }) async {
     //!!!!!show를 통해 AddJobPage 에서 Context 가져오기에 여기서 Provider 생성

@@ -10,7 +10,7 @@ import 'package:time_tracker_flutter_course/services/database.dart';
 
 class EntriesBloc {
   EntriesBloc({@required this.database});
-  final Database database;
+  final DataBase database;
 
   /// combine List<Job>, List<Entry> into List<EntryJob>
   Stream<List<EntryJob>> get _allEntriesStream => CombineLatestStream.combine2(

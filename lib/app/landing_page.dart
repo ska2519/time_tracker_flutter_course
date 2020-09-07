@@ -25,7 +25,7 @@ class LandingPage extends StatelessWidget {
             //value로 추가 provider 장착
             return Provider<User>.value(
               value: user,
-              child: Provider<Database>(
+              child: Provider<DataBase>(
                 create: (_) => FirestoreDatabase(uid: user.uid),
                 child: HomePage(),
               ),

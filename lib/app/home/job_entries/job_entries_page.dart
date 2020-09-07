@@ -18,11 +18,11 @@ import 'package:time_tracker_flutter_course/services/database.dart';
 
 class JobEntriesPage extends StatelessWidget {
   const JobEntriesPage({@required this.database, @required this.job});
-  final Database database;
+  final DataBase database;
   final Job job;
 
   static Future<void> show(BuildContext context, Job job) async {
-    final Database database = Provider.of<Database>(context, listen: false);
+    final DataBase database = Provider.of<DataBase>(context, listen: false);
     await Navigator.of(context).push(
       CupertinoPageRoute(
           fullscreenDialog: false,

@@ -10,7 +10,7 @@ import 'package:time_tracker_flutter_course/services/firestore_service.dart';
 
 // TOPTIP! FB스토어 데이터 베이스와 서비스(repository)를 분리하여 데이터베이스 API는 동일하게 유지
 //따라서 해당 데이터베이스를 변경해도 나머지 코드에는 영향을 미치지 않습니다.
-abstract class Database {
+abstract class DataBase {
   Future<void> setJob(Job job);
   Future<void> deleteJob(Job job);
   Stream<Job> jobStream({@required String jobId});
@@ -24,7 +24,7 @@ abstract class Database {
 //document ID 날짜로 저장
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
-class FirestoreDatabase implements Database {
+class FirestoreDatabase implements DataBase {
   FirestoreDatabase({@required this.uid}) : assert(uid != null);
   final String uid;
 
