@@ -2,15 +2,41 @@
 
 time tracker flutter course
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Included in this course
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+▪ Building layouts with Material & Cupertino widgets + build your own custom widgets
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+▪ Navigation
+
+▪ Firebase Authentication (anonymous, email & password, Google, Facebook)
+
+▪ State Management: how to use setState, lifting state up via callbacks, global access, scoped access with Provider, BLoCs, ValueNotifier & ChangeNotifier
+
+▪ Streams, building reactive apps & advanced stream operations with RxDart
+
+▪ Forms, input handling and validation
+
+▪ Managing and updating packages
+
+▪ Databases and Cloud Firestore
+
+▪ Working with Forms and Cloud Firestore
+
+▪ Working with ListViews and multiple UI states
+
+▪ Date & time pickers
+
+▪ Unit & Widget tests with mockito (basics to advanced)
+
+▪ Windows, macOS or Linux for Android app development
+
+▪ macOS for iOS app development
+
+## 배울 내용
+
+▪ Build a complete, real-world app with Flutter & Firebase
+▪ Write iOS & Android apps with a single codebase
+▪ Write production-ready code following best practices and become a competent Flutter developer
+▪ Fast-track your Flutter learning with practical tips and proven techniques
