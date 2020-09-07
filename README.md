@@ -37,6 +37,9 @@ time tracker flutter course
 ## 배울 내용
 
 ▪ Build a complete, real-world app with Flutter & Firebase
+
 ▪ Write iOS & Android apps with a single codebase
+
 ▪ Write production-ready code following best practices and become a competent Flutter developer
+
 ▪ Fast-track your Flutter learning with practical tips and proven techniques
