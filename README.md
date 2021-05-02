@@ -1,6 +1,6 @@
-# time_tracker_flutter_course
+# Flutter & Firebase Course | Code With Andrea
 
-time tracker flutter course
+This repo contains the source code for my [Flutter & Firebase Course](https://nnbd.me/ff) on Udemy.
 
 
 ## Included in this course
